@@ -8,11 +8,43 @@ import {
   QCardActions,
   QBtn,
 } from "quasar";
+import { ref } from "vue";
+import axios from "axios";
 
 export default {
   name: "SowellAuth",
 
-  setup() {
+  props: {
+    store: Object,
+  },
+
+  setup({ store }) {
+    const email = ref("");
+    const password = ref("");
+
+    const submitHandler = async () => {
+      console.log("submit....");
+
+      const data = {
+        auth: { email: "gardienb@sowellapp.com", password: "123456" },
+      };
+
+      var response = "";
+      try {
+        response = await axios.post("https://api.sowellapp.com/tokens", data);
+        if (response.status == "201") {
+          console.log(response);
+          store.commit("auth/setJWT", response.data.jwt);
+        } else {
+          console.log("Not 201");
+          store.commit("auth/clearJWT");
+        }
+      } catch (err) {
+        console.log("Error...");
+        store.commit("auth/clearJWT");
+      }
+    };
+
     return () => [
       h(
         QPage,
@@ -39,6 +71,7 @@ export default {
                 QForm,
                 {
                   class: "q-gutter-md",
+                  submit: submitHandler,
                 },
                 [
                   h(QCardSection, [
@@ -49,6 +82,7 @@ export default {
                       dense: true,
                       label: "Email",
                       type: "email",
+                      modelValue: email,
                     }),
                     h(QInput, {
                       class: "full-width q-mb-md",
@@ -57,6 +91,7 @@ export default {
                       dense: true,
                       label: "Mot de passe",
                       type: "password",
+                      modelValue: password,
                     }),
                   ]),
                   h(
