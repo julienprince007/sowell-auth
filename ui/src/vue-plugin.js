@@ -1,16 +1,9 @@
-import Component from './components/Component'
+import Login from "./components/Login";
 
+const version = __UI_VERSION__;
 
-const version = __UI_VERSION__
-
-function install (app) {
-  app.component(Component.name, Component)
-
+function install(app) {
+  app.component(Login.name, Login);
 }
 
-export {
-  version,
-  Component,
-
-  install
-}
+export { version, Login, install };

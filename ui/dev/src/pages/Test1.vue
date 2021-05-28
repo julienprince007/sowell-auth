@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <SowellAuth :store="$store" />
+    <Login :store="$store" />
     <p>{{ $store.state.auth.jwt }}</p>
   </q-page>
 </template>
